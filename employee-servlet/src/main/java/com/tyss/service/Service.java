@@ -3,6 +3,7 @@ package com.tyss.service;
 import java.util.List;
 
 import com.tyss.beans.Employee;
+import com.tyss.beans.Login;
 
 public interface Service {
 
@@ -13,4 +14,6 @@ public interface Service {
 	void delete(int id);
 
 	void edit(Employee employee);
+	
+	Boolean validate(Login login);
 }

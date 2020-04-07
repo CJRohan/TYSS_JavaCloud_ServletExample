@@ -8,17 +8,22 @@
 <title>Welcome</title>
 </head>
 <body>
+<%
+if (!("loggedin").equals(session.getAttribute("admins")))
+	response.sendRedirect("");
+%>
 	<a
 		href="${pageContext.request.contextPath}/employeeAssignment?action=LOGOUT"
 		method="POST"">LOGOUT</a>
+		<br>
 	<br>
 	<h1 align="center">JSP CRUD Example</h1>
-	<br>
+	<br><br>
 	<br>
 	<div align="center">
 		<a
 			href="${pageContext.request.contextPath}/employeeAssignment?action=ADD">Add
-			User</a> <br> <a
+			User</a> <br> <br> <a
 			href="${pageContext.request.contextPath}/employeeAssignment?action=LIST">View
 			Users</a>
 	</div>

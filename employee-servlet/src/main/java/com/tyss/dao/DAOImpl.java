@@ -10,6 +10,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import com.tyss.beans.Employee;
+import com.tyss.beans.Login;
 
 public class DAOImpl implements DAO {
 
@@ -79,6 +80,11 @@ public class DAOImpl implements DAO {
 
 		entityManager.close();
 		entityManagerFactory.close();
+	}
+	
+	@Override
+	public Boolean validateLogin(Login user) {
+		return user.getAdmin().equalsIgnoreCase("chandan") && user.getPassword().equalsIgnoreCase("thankyou");
 	}
 
 }

@@ -8,6 +8,10 @@
 <title>EmployeeList</title>
 </head>
 <body>
+<%
+if (!("loggedin").equals(session.getAttribute("admins")))
+	response.sendRedirect("");
+%>
 	<a href="${pageContext.request.contextPath}/employeeAssignment?action=WELCOME" method = "POST"">HOME</a>
 	|
 	<a href="${pageContext.request.contextPath}/employeeAssignment?action=LOGOUT" method = "POST"">LOGOUT</a>

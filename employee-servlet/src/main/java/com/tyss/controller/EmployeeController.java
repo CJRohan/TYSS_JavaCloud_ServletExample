@@ -8,51 +8,67 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.tyss.beans.Employee;
+import com.tyss.beans.Login;
 import com.tyss.factory.Factory;
 import com.tyss.service.Service;
 
 @SuppressWarnings("serial")
-public class EmployeeController extends HttpServlet{
+public class EmployeeController extends HttpServlet {
 
 	private Service service;
-	
+
 	public EmployeeController() {
 		service = Factory.getService();
 	}
-	
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = req.getSession();
 		PrintWriter writer = resp.getWriter();
 		String action = req.getParameter("action");
 		writer.print(action);
 		RequestDispatcher dispatcher = null;
-		switch(action) {
+		
+		if (action == null)
+			action = "ENTRY";
+		
+		else if (!"LOGIN".equals(action) && !"loggedin".equals(session.getAttribute("admins"))) {
+			action = "ENTRY";
+			req.setAttribute("message", "Please Login First!!!");
+		}
+		
+		switch (action) {
+		case "ENTRY":
+			dispatcher = req.getRequestDispatcher("");
+			dispatcher.forward(req, resp);
+			break;
 		case "LOGIN":
-			if (req.getParameter("admin").equalsIgnoreCase("chandan") 
-					&& req.getParameter("pass").equalsIgnoreCase("thankyou")) {
-				dispatcher = req.getRequestDispatcher("/welcome.jsp");
-				dispatcher.forward(req, resp);								
+			if (service.validate(new Login(req.getParameter("admin"),req.getParameter("pass")))){
+				session.setAttribute("admins", "loggedin");
+				dispatcher = req.getRequestDispatcher("Views/welcome.jsp");
+				dispatcher.forward(req, resp);
 			} else {
 				req.setAttribute("message", "Invalid Credentials.. Please try again!!!");
-				dispatcher = req.getRequestDispatcher("/login.jsp");
+				dispatcher = req.getRequestDispatcher("Views/login.jsp");
 				dispatcher.forward(req, resp);
 			}
 			break;
 		case "WELCOME":
-			dispatcher = req.getRequestDispatcher("/welcome.jsp");
-			dispatcher.forward(req, resp);			
+			dispatcher = req.getRequestDispatcher("Views/welcome.jsp");
+			dispatcher.forward(req, resp);
 			break;
 		case "LIST":
 			writer.print("LISTING");
 			req.setAttribute("employees", service.list());
-			dispatcher = req.getRequestDispatcher("/list.jsp");
+			dispatcher = req.getRequestDispatcher("Views/list.jsp");
 			dispatcher.forward(req, resp);
 			break;
 		case "ADD":
 			writer.print(action);
-			dispatcher = req.getRequestDispatcher("/add.jsp");
+			dispatcher = req.getRequestDispatcher("Views/add.jsp");
 			dispatcher.forward(req, resp);
 			break;
 		case "ADDEmployee":
@@ -71,7 +87,7 @@ public class EmployeeController extends HttpServlet{
 				service.edit(employee);
 				req.setAttribute("message", "Employee Updated succesfully!!!");
 			}
-			dispatcher = req.getRequestDispatcher("/add.jsp");
+			dispatcher = req.getRequestDispatcher("Views/add.jsp");
 			dispatcher.forward(req, resp);
 			break;
 		case "EDIT":
@@ -82,7 +98,7 @@ public class EmployeeController extends HttpServlet{
 			req.setAttribute("mail", req.getParameter("mail"));
 			req.setAttribute("sex", req.getParameter("sex"));
 			req.setAttribute("country", req.getParameter("country"));
-			dispatcher = req.getRequestDispatcher("/add.jsp");
+			dispatcher = req.getRequestDispatcher("Views/add.jsp");
 			dispatcher.forward(req, resp);
 			break;
 		case "DELETE":
@@ -91,22 +107,23 @@ public class EmployeeController extends HttpServlet{
 			System.out.println(req.getParameter("id"));
 			req.setAttribute("employees", service.list());
 			req.setAttribute("message", "Record Deleted Successfully!!!");
-			dispatcher = req.getRequestDispatcher("/list.jsp");
+			dispatcher = req.getRequestDispatcher("Views/list.jsp");
 			dispatcher.forward(req, resp);
 			break;
 		case "LOGOUT":
 			req.setAttribute("message", "You have sucessfully logged out!!!");
-			dispatcher = req.getRequestDispatcher("/login.jsp");
-			dispatcher.forward(req, resp);			
+			session.setAttribute("admins", "");
+			dispatcher = req.getRequestDispatcher("Views/login.jsp");
+			dispatcher.forward(req, resp);
 		default:
 			writer.print("UnderATTACK");
 		}
-	
+
 	}
-	
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		doGet(req,resp);
+		doGet(req, resp);
 	}
-	
+
 }

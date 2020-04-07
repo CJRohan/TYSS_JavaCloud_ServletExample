@@ -8,6 +8,10 @@
 <title>Add Employee</title>
 </head>
 <body>
+<%
+if (!("loggedin").equals(session.getAttribute("admins")))
+	response.sendRedirect("");
+%>
 	<a href="${pageContext.request.contextPath}/employeeAssignment?action=WELCOME" method = "POST">HOME</a>
 	|
 	<a href="${pageContext.request.contextPath}/employeeAssignment?action=LOGOUT" method = "POST"">LOGOUT</a>
@@ -26,10 +30,11 @@
 		Enter Password: <input type="text" name="password" value = "${password}"><br> 
 		Enter  EmailID: <input type="text" name="mail" value = "${mail}"><br> 
 		Sex:<br> MALE<input
-			type="radio" name="sex" value="MALE"> FEMALE<input
-			type="radio" name="sex" value="FEMALE"><br> 
+			type="radio" name="sex" value="MALE" checked="checked"> FEMALE<input
+			type="radio" name="sex" value="FEMALE" ><br> 
 			Country : <select
 			name="country" value = "${country}">
+			<option value="${country}">${country}</option>
 			<option value="India">India</option>
 			<option value="Bhutan">Bhutan</option>
 			<option value="Nepal">Nepal</option>

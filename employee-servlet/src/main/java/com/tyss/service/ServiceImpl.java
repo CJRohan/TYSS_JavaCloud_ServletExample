@@ -3,6 +3,7 @@ package com.tyss.service;
 import java.util.List;
 
 import com.tyss.beans.Employee;
+import com.tyss.beans.Login;
 import com.tyss.dao.DAO;
 import com.tyss.factory.Factory;
 
@@ -32,6 +33,11 @@ public class ServiceImpl implements Service {
 	@Override
 	public void edit(Employee employee) {
 		dao.edit(employee);
+	}
+	
+	@Override
+	public Boolean validate(Login user) {
+		return dao.validateLogin(user);
 	}
 	
 	

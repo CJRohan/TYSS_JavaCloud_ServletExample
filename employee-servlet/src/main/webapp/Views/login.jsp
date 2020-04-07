@@ -8,13 +8,19 @@
 <title>Admin Login</title>
 </head>
 <body>
+<%
+if (("loggedin").equals(session.getAttribute("admins")))
+	response.sendRedirect("employeeAssignment?action=WELCOME");
+%>
 <h3>${message}</h3>
-<br><br><br><br>
+<br><br>
+<h1 align="center">LOGIN PAGE</h1>
+<br><br><br>
 <div align = "center">
 <form action="${pageContext.request.contextPath}/employeeAssignment" method="POST">
 <input type="hidden" name="action" value="LOGIN">
-Admin Name: <input type="text" name="admin"><br>
--Password-: <input type="text" name="pass"><br>
+<input type="text" name="admin" placeholder="Admin Name"><br><br>
+<input type="password" name="pass" placeholder="Password"><br><br>
 <input type="submit" value="LOGIN">
 </form>
 </div>

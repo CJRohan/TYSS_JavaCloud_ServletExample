@@ -3,6 +3,7 @@ package com.tyss.dao;
 import java.util.List;
 
 import com.tyss.beans.Employee;
+import com.tyss.beans.Login;
 
 public interface DAO {
 	
@@ -14,5 +15,5 @@ public interface DAO {
 
 	void edit(Employee employee);
 
-	
+	Boolean validateLogin(Login user);
 }
